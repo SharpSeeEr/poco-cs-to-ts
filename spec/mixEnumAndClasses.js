@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 
 /* jshint -W043 */
 
@@ -66,7 +66,7 @@ declare enum MyEnum {\n\
     Green = 0,\n\
     Blue = 1\n\
 }\n";
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should handle enums and classes in the same file', function() {

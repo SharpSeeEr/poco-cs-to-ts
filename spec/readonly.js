@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 // Disables multiline warning, we're fine with ES5
 // jshint -W043
 
@@ -25,7 +25,7 @@ var expectedOutputWithoutReadOnly = "interface MyPoco {\n\
     InterestingWhitespace: string;\n\
 }\n";
 
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should transform readonly properties correctly', function() {

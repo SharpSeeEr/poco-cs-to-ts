@@ -1,13 +1,12 @@
-/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
-// Disables multiline warning, we're fine with ES5
-// jshint -W043
+const plugin = require('./dist/bundle');
 
+console.log('Starting dev test');
 var sampleFile = "\
 using System;\n\
 \n\
 namespace MyNamespace.Domain\n\
 {\n\
-    public class MyPoco :  BasePoco\n\
+    public class MyPoco\n\
     {\n\
         public MyPoco()\n\
         {\n\
@@ -19,7 +18,8 @@ namespace MyNamespace.Domain\n\
             this.Name = value.Name;\n\
             this.Title = value.Title;\n\
         }\n\
-\
+\n\
+        [SomeAttribute(42)]\n\
         public int Id { get; set; }\n\
         public string Name { get; set; }\n\
         //public string IgnoreMe { get; set; }\n\
@@ -31,38 +31,25 @@ namespace MyNamespace.Domain\n\
         public string Title\n\
         {\n\
             get;\n\
-            set;\n\ }\n\
-        public List<string> ListFields { get; set; }\n\
+            set;\n\
+        }\n\
+        public Dictionary<int, string> DictionaryFields { get; set; }\n\
+        public IDictionary<string, CustomClass> IDictionaryFields { get; set; }\n\
+        public List<string> ListStringFields { get; set; }\n\
+        public IList<int> IListIntFields { get; set; }\n\
+        public SomeGeneric<int, string> SomeGenericField { get; set; }\n\
         public IEnumerable<string> IEnumerableFields { get; set; }\n\
-        public ICollection<string> ICollectionFields { get; set; }\n\
         public string[] ArrayFields { get; set; }\n\
+        public int[] NumberArray { get; set; }\n\
+        public List<int> NumberList { get; set; }\n\
         public bool? OptionalBool {get; set;}\n\
         public DateTime SomeDate {get;set;}\n\
         public decimal SomeDecimal {get;set;}\n\
         public Guid SomeGuid {get;set;}\n\
+        public JObject DynamicContents { get; set; }\n\
+        public dynamic DynamicToAny { get; set; }\n\
+        public object ObjectToAny { get; set; }\n\
     }\n\
 }\n";
-
-var expectedOutput = "interface MyPoco extends BasePoco {\n\
-    Id: number;\n\
-    Name: string;\n\
-    Title: string;\n\
-    ListFields: string[];\n\
-    IEnumerableFields: string[];\n\
-    ICollectionFields: string[];\n\
-    ArrayFields: string[];\n\
-    OptionalBool?: boolean;\n\
-    SomeDate: string;\n\
-    SomeDecimal: number;\n\
-    SomeGuid: string;\n\
-}\n";
-
-var pocoGen = require('../src/index.js').pocoGen;
-
-describe('typescript-cs-poco', function() {
-	it('should turn inheritence into extends', function() {
-		var result = pocoGen(sampleFile);
-        
-        expect(result).toEqual(expectedOutput);
-	});
-});
+let result = plugin.parser(sampleFile);
+console.log(result);

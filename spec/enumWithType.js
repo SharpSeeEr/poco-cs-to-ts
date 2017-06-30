@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 // Disables multiline warning, we're fine with ES5
 // jshint -W043
 
@@ -29,7 +29,7 @@ var expectedOutput = "declare enum MyEnum {\n\
     Ultraviolet = 11\n\
 }\n";
 
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should ignore an enum\'s explicit type', function() {

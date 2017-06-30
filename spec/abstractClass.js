@@ -18,7 +18,7 @@
 //    Name: string;\n\
 //}\n";
 
-//var pocoGen = require('../src/index.js');
+//var pocoGen = require('../src/index.js').pocoGen;
 
 //describe('typescript-cs-poco', function() {
 //	it('should transform an abstract class correctly', function() {

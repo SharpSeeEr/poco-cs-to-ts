@@ -1,7 +1,7 @@
 {
-  "name": "typescript-cs-poco",
+  "name": "cs-js-poco",
   "version": "1.12.0",
-  "description": "Generates a Typescript type definition file for a C# POCO class or enum.",
+  "description": "Generates javascript poco file for a C# POCO class or enum.",
   "main": "./src/index.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node --color --matchall spec"
@@ -11,20 +11,25 @@
     "url": "git+https://github.com/ffMathy/typescript-cs-poco.git"
   },
   "keywords": [
-    "typescript",
+    "javascript",
     "C#",
-    "poco"
+    "poco",
+    "models"
   ],
-  "author": "Mathias Lorenzen <mathias.lorenzen@live.com>",
+  "author": "Aaron Throckmorton <aaron@sharpseergroup.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/evertras/typescript-cs-poco/issues"
   },
   "homepage": "https://github.com/evertras/typescript-cs-poco#readme",
   "devDependencies": {
-    "@types/node": "^7.0.18",
-    "gulp": "^3.9.0",
+    "@types/jasmine": "^2.5.53",
+    "@types/node": "^8.0.4",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.8",
     "jasmine-node": "^1.14.5",
-    "tsd": "^0.6.5"
+    "through2": "^2.0.3",
+    "typings": "^2.1.1",
+    "webpack": "^3.0.0"
   }
 }

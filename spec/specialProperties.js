@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 // Disabled multiline warning, we're fine with ES5
 // jshint -W043
 
@@ -35,7 +35,7 @@ var expectedWithoutVirtuals = "interface MyPoco {\n\
 interface MyOtherPoco {\n\
     id: number;\n\
 }\n";
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should include properties marked as virtual', function() {

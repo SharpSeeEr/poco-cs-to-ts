@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 // Disable multiline warning, we're fine with ES5
 // jshint -W043
 
@@ -23,7 +23,7 @@ var expectedOutput = "declare type MyEnum =\n\
     'Blue'\n\
 ";
 
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should transform an enum to a string union type correctly', function() {

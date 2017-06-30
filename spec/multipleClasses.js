@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 
 /* jshint -W043 */
 
@@ -74,7 +74,7 @@ interface MyStruct {\n\
     SomeIntField: number;\n\
 }\n";
 
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should handle multiple classes in the same file', function() {

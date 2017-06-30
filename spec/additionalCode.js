@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/jasmine-node/lib/jasmine-node/jasmine-1.3.1.js" />
 // Disable multiline warning, we're fine with ES5
 // jshint -W043
 
@@ -19,7 +19,7 @@ var expectedOutput = "interface MyPoco {\n\
     foo(blah: number): OtherStuff;\n\
 }\n";
 
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function() {
 	it('should transform additional code correctly', function() {

@@ -3,8 +3,11 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
-    "target": "es5", 
+    "target": "es6", 
     "moduleResolution": "node",
-    "module": "commonjs" 
-  }
+    "module": "commonjs"
+  },
+  "files": [
+    "src/index.ts"
+  ]
 }

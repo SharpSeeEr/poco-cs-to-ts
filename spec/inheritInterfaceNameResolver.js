@@ -1,7 +1,7 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 // Disabled multiline warning, we're fine with ES5
 // jshint -W043
-var pocoGen = require('../src/index.js');
+var pocoGen = require('../src/index.js').pocoGen;
 
 describe('typescript-cs-poco', function () {
     it('should use the interfaceNameResolver option correctly for base class names', function () {
