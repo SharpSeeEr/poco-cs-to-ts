@@ -9,8 +9,10 @@ export class PocoGenerator {
     this.options = new Options(options);
   }
   private lines: string[];
+  private lookup: any;
 
-  public toJs(pocos: Poco[]): string {
+  public toJs(pocos: Poco[], lookup: any): string {
+    this.lookup = lookup || {};
     this.lines = [];
     let firstPoco = true;
     for (let poco of pocos) {
@@ -23,7 +25,6 @@ export class PocoGenerator {
   }
 
   private pocoToJs(poco: Poco) {
-    //console.log(poco.type)
     if (poco.type === 'class') this.classToJs(poco);
     else this.enumToJs(poco);
   }
@@ -32,8 +33,17 @@ export class PocoGenerator {
     this.lines.push(`export const ${poco.name} = {`);
     this.indentLevel += 1;
     let propText: string[] = [];
+
     for (let prop of poco.properties) {
-      propText.push(`${this.getIndent()}${prop.name}: ${prop.type.getDefaultValue()} /* ${prop.type.resolvedFrom} */`)
+      let commentPrefix = '';
+      let defaultValue = prop.type.getDefaultValue();
+      if (this.lookup && this.lookup[prop.type.name]) {
+        if (this.lookup[prop.type.name].type === 'enum') {
+          defaultValue = 0;
+          commentPrefix = 'enum ';
+        }
+      }
+      propText.push(`${this.getIndent()}${prop.name}: ${defaultValue} /* ${commentPrefix}${prop.type.resolvedFrom} */`)
     }
     this.lines.push(propText.join(',\n'));
     this.indentLevel -= 1;
@@ -48,8 +58,24 @@ export class PocoGenerator {
   }
 
   private enumToJs(poco: Poco) {
+    this.lines.push(`var ${poco.name};`);
+    this.lines.push(`(function (${poco.name}) {`);
+    
+    this.indentLevel += 1;
+    let valueText: string[] = [];
+    for (let value of poco.enumValues) {
+      valueText.push(`${this.getIndent()}${poco.name}[${poco.name}["${value.name}"] = ${value.value}] = "${value.name}";`)
 
+    }
+    this.lines.push(valueText.join('\n'));
+    this.indentLevel -= 1;
+    this.lines.push(`})(${poco.name} = exports.${poco.name} || (exports.${poco.name} = {}));`);
+//     ${poco.name}[${poco.name}["${value.name}"] = ${value.value}] = "${value.name}";
+//     ${poco.name}[${poco.name}["Checking"] = 1] = "Checking";
+//     ${poco.name}[${poco.name}["Savings"] = 2] = "Savings";
+// })(${poco.name} = exports.Acco${poco.name}ntType || (exports.${poco.name} = {}));
   }
+  
   private indentLevel = 0;
   private indent = '  ';
   private addLine(line: string) {

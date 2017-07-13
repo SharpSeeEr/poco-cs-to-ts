@@ -11,12 +11,20 @@ class Poco {
         this.options = options;
         this.properties = [];
         this.methods = [];
+        this.enumValues = [];
         if (this.type === 'class')
             this.parseClass();
         else if (this.type === 'enum')
             this.parseEnum();
     }
     parseEnum() {
+        let nextValue = 0;
+        for (let match of Poco.safeRegEx.match(Poco.expressions.enumEntry, this.body)) {
+            //console.log("Property Match: ", match);
+            let enumValue = new EnumValue(match[1], match[2] || nextValue);
+            this.enumValues.push(enumValue);
+            nextValue = enumValue.value + 1;
+        }
     }
     parseClass() {
         this.parseProperties();
@@ -69,6 +77,13 @@ Poco.expressions = {
 };
 Poco.safeRegEx = new SafeRegEx_1.SafeRegEx();
 exports.Poco = Poco;
+class EnumValue {
+    constructor(name, value) {
+        this.name = name;
+        this.value = value;
+    }
+}
+exports.EnumValue = EnumValue;
 class Prop {
     constructor(name) {
         this.name = name;

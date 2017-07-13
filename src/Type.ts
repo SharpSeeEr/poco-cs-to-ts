@@ -130,7 +130,7 @@ export class Type {
   private static tryParseCollection(type: Type): Boolean {
     const match = this.safeRegEx.match(this.expressions.collection, type.name)[0];
     if (match) {
-      console.log(match);
+      //console.log(match);
       type.isArray = true;
       type.name = match[1];
       type.generics = [this.parse(match[2])];
@@ -141,7 +141,7 @@ export class Type {
   private static tryParseDictionary(type: Type): Boolean {
     const match = this.safeRegEx.match(this.expressions.dictionary, type.name)[0];
     if (match) {
-      console.log(match);
+      //console.log(match);
       type.isDictionary = true;
       
       let type1 = match[1];

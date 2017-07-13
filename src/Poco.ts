@@ -19,7 +19,7 @@ export class Poco {
 
   public properties: Prop[] = [];
   public methods: Method[] = [];
-  
+  public enumValues: EnumValue[] = [];
 
   private static expressions = {
     property: /(?:(?:((?:public)?)|(?:private)|(?:protected)|(?:internal)|(?:protected internal)) )+(?:(virtual|readonly) )?([\w\d\._<>, \[\]]+?)(\??) ([\w\d]+)\s*(?:{\s*get;\s*(?:private\s*)?set;\s*}|;)/gm,
@@ -30,7 +30,13 @@ export class Poco {
   };
   
   parseEnum() {
-
+    let nextValue = 0;
+    for (let match of Poco.safeRegEx.match(Poco.expressions.enumEntry, this.body)) {
+      //console.log("Property Match: ", match);
+      let enumValue = new EnumValue(match[1], match[2] || nextValue);
+      this.enumValues.push(enumValue);
+      nextValue = enumValue.value + 1;
+    }
   }
 
   parseClass() {
@@ -82,6 +88,12 @@ export class Poco {
       args.push(argument);
     }
     return args;
+  }
+}
+
+export class EnumValue {
+  constructor(public name: String, public value: number) {
+
   }
 }
 

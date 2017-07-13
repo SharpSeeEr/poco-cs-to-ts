@@ -1,5 +1,6 @@
-const plugin = require('./dist/bundle');
+const plugin = require('./dist/index');
 
+console.log(plugin);
 console.log('Starting dev test');
 var sampleFile = "\
 using System;\n\

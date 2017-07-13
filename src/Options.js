@@ -31,3 +31,9 @@ class Options {
     }
 }
 exports.Options = Options;
+var AccountType;
+(function (AccountType) {
+    AccountType[AccountType["None"] = 0] = "None";
+    AccountType[AccountType["Checking"] = 1] = "Checking";
+    AccountType[AccountType["Savings"] = 2] = "Savings";
+})(AccountType = exports.AccountType || (exports.AccountType = {}));

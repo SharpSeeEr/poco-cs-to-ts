@@ -6,6 +6,7 @@ const Poco_1 = require("./Poco");
 class PocoParser {
     constructor(options) {
         this.pocos = [];
+        this.lookup = {};
         this.safeRegEx = new SafeRegEx_1.SafeRegEx();
         this.options = new Options_1.Options(options);
     }
@@ -20,6 +21,7 @@ class PocoParser {
         for (let match of matches) {
             let poco = new Poco_1.Poco(match[2], match[3], match[4], match[5], this.options);
             this.pocos.push(poco);
+            this.lookup[poco.name] = poco;
         }
     }
     removeComments(code) {

@@ -10,7 +10,7 @@ function jsPocoGenParser(input: string, options: Options): string {
     let pocos = pocoParser.parse(input);
     
     const pocoGenerator = new PocoGenerator(options);
-    return pocoGenerator.toJs(pocos);
+    return pocoGenerator.toJs(pocos, pocoParser.lookup);
 }
 
 var PLUGIN_NAME = 'gulp-cs-js-poco-gen';

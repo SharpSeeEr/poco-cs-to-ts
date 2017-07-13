@@ -37,10 +37,10 @@ export class Options {
   }
   
   camelCaseNameResolver(name: string): string {
-  return name.replace(/(^[A-Z]+)(?![a-z])|(^[A-Z])(?=[a-z])/g, function (match) {
-    return match.toLowerCase();
-  });
-}
+    return name.replace(/(^[A-Z]+)(?![a-z])|(^[A-Z])(?=[a-z])/g, function (match) {
+      return match.toLowerCase();
+    });
+  }
 
   constructor(options?: Object) {
     this.interfaceNameResolver = this.defaultInterfaceNameResolver;
@@ -48,4 +48,10 @@ export class Options {
     this.propertyNameResolver = this.defaultPropertyNameResolver;
     if (options) Object.assign(this, options);
   }
+}
+
+export enum AccountType {
+  None,
+  Checking,
+  Savings
 }

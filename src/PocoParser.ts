@@ -7,6 +7,7 @@ export class PocoParser {
   public options: Options;
 
   public pocos: Poco[] = [];
+  public lookup = {};
 
   constructor(options?: Object) {
     this.options = new Options(options);
@@ -35,6 +36,7 @@ export class PocoParser {
     for (let match of matches) {
       let poco = new Poco(match[2], match[3], match[4], match[5], this.options);
       this.pocos.push(poco);
+      this.lookup[poco.name] = poco;
     }
   }
 
