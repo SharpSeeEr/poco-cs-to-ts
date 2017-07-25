@@ -1,14 +1,9 @@
-# typescript-cs-poco
-Generates a Typescript type definition file for a C# POCO class.  Takes in a string of the file contents and spits back a string of the matching Typescript interface.
-
-## Current wrappers
-
-- Gulp: https://github.com/ffMathy/gulp-typescript-cs-poco
-- Grunt: https://github.com/ffMathy/grunt-typescript-cs-poco
+# poco-cs-to-ts
+Generates Typescript pocos and enums from C# classes and enums.  The parser takes in a string of the file contents and spits back a string of the matching Typescript class or enum.
 
 ## Installation with npm
 
-`npm install --save https://github.com/ffMathy/typescript-cs-poco.git`
+`npm install --save-dev poco-cs-to-ts`
 
 ## Options
 

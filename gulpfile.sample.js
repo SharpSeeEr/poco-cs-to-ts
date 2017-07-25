@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var pocoGen = require('./src/index').default;
+var pocoGen = require('typescript-cs-poco').default;
 var concat = require('gulp-concat');
 
 gulp.task('poco', function () {

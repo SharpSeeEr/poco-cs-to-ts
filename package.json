@@ -1,7 +1,7 @@
 {
-  "name": "typescript-cs-poco",
-  "version": "2.0.0",
-  "description": "Generates typescript or javascript poco file(s) for a C# POCO classes and enums.",
+  "name": "poco-cs-to-ts",
+  "version": "1.0.0",
+  "description": "Generates Typescript pocos and enums from C# classes and enums.",
   "main": "./dist/index.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node --color --matchall spec"
