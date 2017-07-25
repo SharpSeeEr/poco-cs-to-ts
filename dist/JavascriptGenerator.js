@@ -1,31 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Options_1 = require("./Options");
-class PocoGenerator {
+const Generator_1 = require("./Generator");
+class JavascriptGenerator extends Generator_1.Generator {
     constructor(options) {
-        this.indentLevel = 0;
-        this.indent = '  ';
-        this.options = new Options_1.Options(options);
+        super(options);
     }
-    toJs(pocos, lookup) {
-        this.lookup = lookup || {};
-        this.lines = [];
-        let firstPoco = true;
-        for (let poco of pocos) {
-            if (!firstPoco)
-                this.lines.push('');
-            this.pocoToJs(poco);
-            firstPoco = false;
-        }
-        return this.lines.join('\n');
-    }
-    pocoToJs(poco) {
-        if (poco.type === 'class')
-            this.classToJs(poco);
-        else
-            this.enumToJs(poco);
-    }
-    classToJs(poco) {
+    filenameExtension() { return 'js'; }
+    generateClass(poco) {
         this.lines.push(`export const ${poco.name} = {`);
         this.indentLevel += 1;
         let propText = [];
@@ -50,7 +31,7 @@ class PocoGenerator {
         this.indentLevel -= 1;
         this.lines.push('}');
     }
-    enumToJs(poco) {
+    generateEnum(poco) {
         this.lines.push(`var ${poco.name};`);
         this.lines.push(`(function (${poco.name}) {`);
         this.indentLevel += 1;
@@ -66,19 +47,5 @@ class PocoGenerator {
         //     ${poco.name}[${poco.name}["Savings"] = 2] = "Savings";
         // })(${poco.name} = exports.Acco${poco.name}ntType || (exports.${poco.name} = {}));
     }
-    addLine(line) {
-        if (line && line.length > 0)
-            line = this.getIndent() + line;
-        else if (!line)
-            line = '';
-        this.lines.push(line);
-    }
-    getIndent() {
-        let indent = '';
-        for (let x = 0; x <= this.indentLevel; x++) {
-            indent += this.indent;
-        }
-        return indent;
-    }
 }
-exports.PocoGenerator = PocoGenerator;
+exports.JavascriptGenerator = JavascriptGenerator;

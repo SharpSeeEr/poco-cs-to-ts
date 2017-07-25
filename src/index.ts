@@ -1,24 +1,35 @@
 import { Options } from './Options';
 import { PocoParser } from './PocoParser';
-import { PocoGenerator } from './PocoGenerator';
+import { Generator } from './Generator';
+import { TypescriptGenerator } from './TypescriptGenerator';
+import { JavascriptGenerator } from './JavascriptGenerator';
 import { PluginError } from 'gulp-util';
 import * as through from 'through2';
 
-function jsPocoGenParser(input: string, options: Options): string {
+function pocoGenParser(input: string, options: Options): string {
     const pocoParser = new PocoParser(options);
 
     let pocos = pocoParser.parse(input);
-    
-    const pocoGenerator = new PocoGenerator(options);
-    return pocoGenerator.toJs(pocos, pocoParser.lookup);
+		
+		let generator: Generator;
+		
+		if (options.outputTypescript) {
+			generator = new TypescriptGenerator(options);
+		}
+		else if (options.outputJavascript) {
+    	generator = new JavascriptGenerator(options);
+		}
+		else return '/* Neither outputTypescript nor outputJavascript was specified in the options - no output generated */';
+
+    return generator.generate(pocos, pocoParser.lookup);
 }
 
 var PLUGIN_NAME = 'gulp-cs-js-poco-gen';
 
-function jsPocoGenGulp(passedOptions: any) {
+function pocoGenGulp(passedOptions: any) {
 	const options = new Options(passedOptions);
 
-    var stream = through.obj(function(file, enc, cb) {
+	let stream = through.obj(function(file, enc, cb) {
 		if (file.isStream()) {
 			this.emit('error', new PluginError(PLUGIN_NAME, "Streams not supported yet!"));
 			return cb();
@@ -26,13 +37,13 @@ function jsPocoGenGulp(passedOptions: any) {
 
 		if (file.isBuffer()) {
 			if (file.contents) {
-				var stringContents = file.contents.toString();
+				let stringContents = file.contents.toString();
 				
-				var result = jsPocoGenParser(stringContents, options);
+				let result = pocoGenParser(stringContents, options);
 				
 				file.contents = new Buffer(result);
 
-                var suffix = 'js'; // options.definitionFile === false || options.generateClass === true ? 'ts' : 'd.ts';
+				let suffix = 'js'; // options.definitionFile === false || options.generateClass === true ? 'ts' : 'd.ts';
 				file.path = file.path.substring(0, file.path.length - 2) + suffix;
 			}
 		}
@@ -45,8 +56,8 @@ function jsPocoGenGulp(passedOptions: any) {
 	return stream;
 };
 
-export { jsPocoGenParser as parser }
-export default jsPocoGenGulp;
+export { pocoGenParser as parser }
+export default pocoGenGulp;
 
 // function pocoGen(input, options) {
 //     input = removeComments(input);

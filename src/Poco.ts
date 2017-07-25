@@ -2,10 +2,6 @@ import { Options } from './Options'
 import { SafeRegEx } from './SafeRegEx'
 import { Type } from './Type'
 
-
-
-
-
 export class Poco {
   constructor(
       public type: any, 

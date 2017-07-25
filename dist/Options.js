@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Options {
     constructor(options) {
+        this.outputTypescript = true;
+        this.outputJavascript = false;
         this.useCamelCase = true;
         this.timeout = 30000;
         this.interfaceNameResolver = this.defaultInterfaceNameResolver;

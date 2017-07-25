@@ -5,7 +5,8 @@
     "checkJs": true,
     "target": "es6", 
     "moduleResolution": "node",
-    "module": "commonjs"
+    "module": "commonjs",
+    "outDir": "dist"
   },
   "files": [
     "src/index.ts"

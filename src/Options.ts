@@ -1,4 +1,7 @@
 export class Options {
+  outputTypescript: boolean = true;
+  outputJavascript: boolean = false;
+  
   baseNamespace: string;
   definitionFile: boolean;
   useStringUniontypes: boolean;
