@@ -34,7 +34,7 @@ function pocoGenGulp(passedOptions) {
                 let stringContents = file.contents.toString();
                 let result = pocoGenParser(stringContents, options);
                 file.contents = new Buffer(result);
-                let suffix = 'js'; // options.definitionFile === false || options.generateClass === true ? 'ts' : 'd.ts';
+                let suffix = 'ts'; // options.definitionFile === false || options.generateClass === true ? 'ts' : 'd.ts';
                 file.path = file.path.substring(0, file.path.length - 2) + suffix;
             }
         }

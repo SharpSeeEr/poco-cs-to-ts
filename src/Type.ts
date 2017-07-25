@@ -9,7 +9,25 @@ export class TypeConversion {
   }
 }
 
-const defaultTypeTranslations = {
+const defaultTypescriptTranslations = {
+  int: () => new TypeConversion("int", "number", '0'),
+  double: () => new TypeConversion("double", "number", '0'),
+  float: () => new TypeConversion("float", "number", '0'),
+  Int32: () => new TypeConversion("Int32", "number", '0'),
+  Int64: () => new TypeConversion("Int64", "number", '0'),
+  short: () => new TypeConversion("short", "number", '0'),
+  long: () => new TypeConversion("long", "number", '0'),
+  decimal: () => new TypeConversion("decimal", "number", '0'),
+  bool: () => new TypeConversion("bool", "boolean", 'false'),
+  DateTime: () => new TypeConversion("DateTime", "Date", "null"),
+  Guid: () => new TypeConversion("Guid", "string", "''"),
+  string: () => new TypeConversion("string", "string", "''"),
+  JObject: () => new TypeConversion("JObject", "any", '{}'),
+  dynamic: () => new TypeConversion("dynamic", "any", '{}'),
+  object: () => new TypeConversion("object", "any", '{}')
+};
+
+const defaultJavascriptTranslations = {
   int: () => new TypeConversion("int", "number", '0'),
   double: () => new TypeConversion("double", "number", '0'),
   float: () => new TypeConversion("float", "number", '0'),
@@ -45,21 +63,19 @@ export class Type {
 
   public defaultValue: string;
 
-  private static defaultValues = {
-    "number": "0",
-    "boolean": "false",
-    "string": "''",
-    "any": "{}"
-  };
+  public conversion: TypeConversion;
 
   public getDefaultValue(): any {
-    if (this.defaultValue) return this.defaultValue;
-    if (this.isArray) return '[]';
-    return '{}';
+    return this.conversion.defaultValue || 'null';
+    // if (this.defaultValue) return this.defaultValue;
+    // if (this.isArray) return '[]';
+    // if (this.name === 'object') return '{}';
+    // return `new ${this.name}()`;
+    //return 'null';
     //return this.defaultValue; // Type.defaultValues[this.name] || '{}';
   }
 
-  private static typeTranslations = Object.assign({}, defaultTypeTranslations);
+  private static typeTranslations = Object.assign({}, defaultTypescriptTranslations);
 
   private static safeRegEx: SafeRegEx = new SafeRegEx();
   
@@ -74,12 +90,28 @@ export class Type {
     genericProperty: /^([\w\d]+)<([\w\d\<\> ,]+)>$/gm
   }
 
+  static parse(typeCandidate: string, scope?: string): Type {
+
+    let type = new Type();
+    type.name = typeCandidate;
+    type.resolvedFrom = typeCandidate;
+
+    Type.tryTranslateType(type) ||
+    Type.tryParseArray(type) ||
+    Type.tryParseCollection(type) ||
+    Type.tryParseDictionary(type) ||
+    Type.tryParseGeneric(type) ||
+    Type.tryParseDefault(type);
+
+    return type;
+  }
+
   private static tryTranslateType(type: Type): boolean {
     let translater = this.typeTranslations[type.name];
     if (translater) {
-      let typeConversion: TypeConversion = translater();
-      type.name = typeConversion.dest;
-      type.defaultValue = typeConversion.defaultValue;
+      type.conversion = translater();
+      //type.name = typeConversion.dest;
+      //type.defaultValue = typeConversion.defaultValue;
 
       if (type.name === 'any') type.isObject = true;
       return true;
@@ -87,33 +119,14 @@ export class Type {
     return false;
   }
 
-  static parse(typeCandidate: string, scope?: string): Type {
-
-    let type = new Type();
-    type.name = typeCandidate;
-    type.resolvedFrom = typeCandidate;
-
-    this.tryTranslateType(type) ||
-    this.tryParseArray(type) ||
-    this.tryParseCollection(type) ||
-    this.tryParseDictionary(type) ||
-    this.tryParseGeneric(type);
-
-    // if (this.tryParseCollection(type)) return type;
-    // if (this.tryParseCollection(type)) return type;
-    // if (this.tryParseCollection(type)) return type;
-    // if (this.tryParseCollection(type)) return type;
-
-    return type;
-  }
-
   private static tryParseGeneric(type: Type): Boolean {
     const match = this.safeRegEx.match(this.expressions.genericProperty, type.name)[0];
     if (match) {
-      //const generic = match[1];
+      type.name = match[1];
       type.generics = match[2]
           .split(",")
           .map(x => this.parse(x.trim()));
+      type.conversion = new TypeConversion(type.name, `${type.name}<${match[2]}>`, `new ${type.name}<${match[2]}>()`);
     }
     return !!match;
   }
@@ -121,8 +134,9 @@ export class Type {
   private static tryParseArray(type: Type): Boolean {
     const match = this.safeRegEx.match(this.expressions.array, type.name)[0];
     if (match) {
+      type.name = match[1];
       type.isArray = true;
-      
+      type.conversion = new TypeConversion(type.name, `${type.name}[]`, '[]')
     }
     return !!match;
   }
@@ -134,6 +148,7 @@ export class Type {
       type.isArray = true;
       type.name = match[1];
       type.generics = [this.parse(match[2])];
+      type.conversion = new TypeConversion(type.name, `${type.generics[0].name}[]`, '[]')
     }
     return !!match;
   }
@@ -148,7 +163,13 @@ export class Type {
       let type2 = match[2];
 
       type.generics = [this.parse(type1), this.parse(type2)];
+      type.conversion = new TypeConversion(type.name, `any`, '{}')
     }
     return !!match;
+  }
+
+  private static tryParseDefault(type: Type): Boolean {
+    type.conversion = new TypeConversion(type.name, type.name, `new ${type.name}()`);
+    return true;
   }
 }

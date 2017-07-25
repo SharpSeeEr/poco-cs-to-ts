@@ -42,7 +42,6 @@ export class PocoParser {
 
   private removeComments(code: string) {
     const output = code.replace(PocoParser.expressions.blockComments, "");
-
     const lines = output
         .split("\n")
         .map(line => line.replace(PocoParser.expressions.lineComments, ""));
